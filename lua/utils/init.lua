@@ -87,4 +87,10 @@ function M.find_files()
     telescope.find_files(opts)
   end
 end
+
+function M.live_grep()
+  local opts = {}
+  local telescope = require "telescope.builtin"
+  local ok = pcall(telescope.live_grep, opts)
+end
 return M
