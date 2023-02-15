@@ -8,6 +8,9 @@ return {
 			"ahmedkhalf/project.nvim",
 			"cljoly/telescope-repo.nvim",
 			"stevearc/aerial.nvim",
+			"nvim-lua/popup.nvim",
+			"nvim-lua/plenary.nvim",
+			"nvim-telescope/telescope-media-files.nvim"
 		},
 		cmd = "Telescope",
 		keys = {
@@ -18,6 +21,7 @@ return {
 			{ "<leader>fr", "<cmd>Telescope file_browser<cr>", desc = "Browser" },
 			{ "<leader>ps", "<cmd>Telescope repo list<cr>", desc = "Search" },
 			{ "<leader>hs", "<cmd>Telescope help_tags<cr>", desc = "Search" },
+			{"<leader>fm", "<cmd>Telescope media_files<cr>", desc = "Media Files"},
 			{ "<leader>fs", require("utils").live_grep, desc = "Live Grep" },
 			{
 				"<leader>pp",
@@ -87,6 +91,10 @@ return {
 						hidden_files = false,
 						theme = "dropdown",
 					},
+					media_files = {
+						filetypes = {"png", "webp", "jpg", "jpeg"},
+						find_cmd = "rg"
+					}
 				},
 			}
 			telescope.setup(opts)
@@ -95,6 +103,7 @@ return {
 			telescope.load_extension("project")
 			telescope.load_extension("projects")
 			telescope.load_extension("aerial")
+			telescope.load_extension('media_files')
 		end,
 	},
 	{
