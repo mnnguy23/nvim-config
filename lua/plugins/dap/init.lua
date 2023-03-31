@@ -5,6 +5,12 @@ local M = {
 		{ "theHamsta/nvim-dap-virtual-text" },
 		{ "nvim-telescope/telescope-dap.nvim" },
 		{ "jbyuki/one-small-step-for-vimkind" },
+		{ "mxsdev/nvim-dap-vscode-js" },
+		{
+			"microsoft/vscode-js-debug",
+			opt = true,
+			run = "npm install --legacy-peer-deps && npm run compile",
+		},
 	},
   -- stylua: ignore
   keys = {
