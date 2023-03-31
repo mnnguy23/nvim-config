@@ -39,6 +39,9 @@ return {
     },
     keys = {
       { "<leader>gs", "<cmd>Neogit kind=floating<cr>", desc = "Status" },
+      {"<leader>go", "<cmd>:DiffviewOpen<cr>", desc= "Diff Open"},
+      {"<leader>gc", "<cmd>:DiffviewClose<cr>", desc= "Diff Close"},
+
     },
   },
   {
