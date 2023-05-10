@@ -10,18 +10,17 @@ return {
 			"stevearc/aerial.nvim",
 			"nvim-lua/popup.nvim",
 			"nvim-lua/plenary.nvim",
-			"nvim-telescope/telescope-media-files.nvim"
+			"nvim-telescope/telescope-media-files.nvim",
 		},
 		cmd = "Telescope",
 		keys = {
-			{ "<leader><space>", require("utils").find_files, desc = "Find Files" },
-			{ "<leader>ff", require("utils").find_files, desc = "Find Files" },
+			{ "<leader><space>", require("utils").find_files, desc = "Git Files" },
+			{ "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find Files" },
 			{ "<leader>fo", "<cmd>Telescope oldfiles<cr>", desc = "Recent" },
 			{ "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
 			{ "<leader>fr", "<cmd>Telescope file_browser<cr>", desc = "Browser" },
 			{ "<leader>ps", "<cmd>Telescope repo list<cr>", desc = "Search" },
 			{ "<leader>hs", "<cmd>Telescope help_tags<cr>", desc = "Search" },
-			{"<leader>fm", "<cmd>Telescope media_files<cr>", desc = "Media Files"},
 			{ "<leader>fs", require("utils").live_grep, desc = "Live Grep" },
 			{
 				"<leader>pp",
@@ -92,9 +91,9 @@ return {
 						theme = "dropdown",
 					},
 					media_files = {
-						filetypes = {"png", "webp", "jpg", "jpeg"},
-						find_cmd = "rg"
-					}
+						filetypes = { "png", "webp", "jpg", "jpeg" },
+						find_cmd = "rg",
+					},
 				},
 			}
 			telescope.setup(opts)
@@ -103,7 +102,7 @@ return {
 			telescope.load_extension("project")
 			telescope.load_extension("projects")
 			telescope.load_extension("aerial")
-			telescope.load_extension('media_files')
+			telescope.load_extension("media_files")
 		end,
 	},
 	{
