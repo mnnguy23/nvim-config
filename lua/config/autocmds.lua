@@ -1,18 +1,25 @@
+local function augroup(name)
+  return vim.api.nvim_create_augroup("mnv_" .. name, { clear = true })
+end
+
 -- See `:help vim.highlight.on_yank()`
-local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
 vim.api.nvim_create_autocmd("TextYankPost", {
   callback = function()
     vim.highlight.on_yank()
   end,
-  group = highlight_group,
+  group = augroup "highlight_yank",
   pattern = "*",
 })
 
 -- Check if we need to reload the file when it changed
-vim.api.nvim_create_autocmd("FocusGained", { command = "checktime" })
+vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
+  group = augroup "checktime",
+  command = "checktime",
+})
 
--- go to last loc when opening a buffer
+-- Go to last loction when opening a buffer
 vim.api.nvim_create_autocmd("BufReadPost", {
+  group = augroup "last_loc",
   callback = function()
     local mark = vim.api.nvim_buf_get_mark(0, '"')
     local lcount = vim.api.nvim_buf_line_count(0)
@@ -38,12 +45,15 @@ vim.on_key(toggle_hlsearch, ns)
 
 -- windows to close
 vim.api.nvim_create_autocmd("FileType", {
+  group = augroup "close_with_q",
   pattern = {
     "OverseerForm",
     "OverseerList",
+    "checkhealth",
     "floggraph",
     "fugitive",
     "git",
+    "gitcommit",
     "help",
     "lspinfo",
     "man",
@@ -56,9 +66,70 @@ vim.api.nvim_create_autocmd("FileType", {
     "toggleterm",
     "tsplayground",
     "vim",
+    "neoai-input",
+    "neoai-output",
   },
   callback = function(event)
     vim.bo[event.buf].buflisted = false
     vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
+  end,
+})
+
+vim.api.nvim_set_hl(0, "TerminalCursorShape", { underline = true })
+vim.api.nvim_create_autocmd("TermEnter", {
+  callback = function()
+    vim.cmd [[setlocal winhighlight=TermCursor:TerminalCursorShape]]
+  end,
+})
+
+vim.api.nvim_create_autocmd("VimLeave", {
+  callback = function()
+    vim.cmd [[set guicursor=a:ver25]]
+  end,
+})
+
+
+
+-- Auto create dir when saving a file, in case some intermediate directory does not exist
+vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+  group = augroup "auto_create_dir",
+  callback = function(event)
+    local file = vim.loop.fs_realpath(event.match) or event.match
+    vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
+  end,
+})
+
+-- wrap and check for spell in text filetypes
+vim.api.nvim_create_autocmd("FileType", {
+  group = augroup "wrap_spell",
+  pattern = { "gitcommit", "markdown" },
+  callback = function()
+    vim.opt_local.wrap = true
+    vim.opt_local.spell = true
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
+  group = augroup "auto_format_options",
+  callback = function()
+    vim.cmd "set formatoptions-=cro"
+  end,
+})
+
+-- start git messages in insert mode
+vim.api.nvim_create_autocmd("FileType", {
+  group = augroup "buf_check",
+  pattern = { "NeogitCommitMessage" },
+  command = "startinsert | 1",
+})
+
+-- Start insert mode
+vim.api.nvim_create_autocmd({ "TermOpen" }, {
+  group = augroup "auto_start_insert",
+  callback = function(event)
+    local ft = vim.bo.filetype
+    if ft == nil or ft == "" then
+      vim.cmd.startinsert()
+    end
   end,
 })

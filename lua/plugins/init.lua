@@ -1,5 +1,5 @@
 return {
-  "nvim-lua/plenary.nvim",
+  {"nvim-lua/plenary.nvim", module="plenary"},
   "MunifTanjim/nui.nvim",
   {
     "nvim-tree/nvim-web-devicons",

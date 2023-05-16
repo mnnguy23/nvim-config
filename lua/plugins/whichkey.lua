@@ -33,7 +33,9 @@ return {
 
 				h = { name = "+Help" },
 				p = { name = "+Project" },
-				t = { name = "+Test", N = { name = "Neotest" } },
+				t = { name = "+Test", N = { name = "Neotest" },
+					p = { "<Plug>PlenaryTestFile", "PlenaryTestFile", name= "PlenaryTestFile" }
+				},
 				v = { name = "+View" },
 				["sn"] = { name = "+Noice" },
 				c = {

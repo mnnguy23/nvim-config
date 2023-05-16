@@ -9,7 +9,7 @@ MODEL_COMPLETION = "text-davinci-003"
 
 TEMPERATURE = 1
 TOP_P = 1
-MAX_TOKENS = 2048
+MAX_TOKENS =4096 
 
 
 def get_api_key():
