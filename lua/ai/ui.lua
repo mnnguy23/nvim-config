@@ -270,13 +270,13 @@ M.append_to_output = function(txt, type)
 		local currentLine = vim.api.nvim_buf_get_lines(buffer, -2, -1, false)[1]
 		vim.api.nvim_buf_set_lines(buffer, -2, -1, false, { currentLine .. line })
 
-		-- local last_line_num = vim.api.nvim_buf_line_count(buffer)
-		-- local last_line = vim.api.nvim_buf_get_lines(buffer, last_line_num - 1, last_line_num, false)[1]
-		-- local new_text = last_line .. line
-
-		-- vim.api.nvim_buf_set_lines(buffer, last_line_num - 1, last_line_num, false, { new_text })
 		local last_line_num = vim.api.nvim_buf_line_count(buffer)
-		-- vim.api.nvim_buf_add_highlight(buffer, ns, hl, last_line_num - 1, 0, -1)
+		local last_line = vim.api.nvim_buf_get_lines(buffer, last_line_num - 1, last_line_num, false)[1]
+		local new_text = last_line .. line
+
+		vim.api.nvim_buf_set_lines(buffer, last_line_num - 1, last_line_num, false, { new_text })
+		local last_line_num = vim.api.nvim_buf_line_count(buffer)
+		vim.api.nvim_buf_add_highlight(buffer, ns, hl, last_line_num - 1, 0, -1)
 
 		if i < length then
 			-- Add new line

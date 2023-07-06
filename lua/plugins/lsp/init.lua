@@ -89,16 +89,6 @@ return {
     end,
   },
   {
-    "utilyre/barbecue.nvim",
-    event = "VeryLazy",
-    dependencies = {
-      "neovim/nvim-lspconfig",
-      "SmiteshP/nvim-navic",
-      "nvim-tree/nvim-web-devicons",
-    },
-    config = true,
-  },
-  {
     "folke/trouble.nvim",
     cmd = { "TroubleToggle", "Trouble" },
     opts = { use_diagnostic_signs = true },
