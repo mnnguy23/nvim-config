@@ -13,6 +13,12 @@ return {
 		"folke/which-key.nvim",
 		dependencies = {
 			"mrjones2014/legendary.nvim",
+			keys = {
+				{ "<C-S-p>", "<cmd>Legendary<cr>", desc = "Legendary" },
+			},
+			opts = {
+				which_key = { auto_register = true },
+			},
 		},
 		event = "VeryLazy",
 		config = function()
@@ -33,8 +39,10 @@ return {
 
 				h = { name = "+Help" },
 				p = { name = "+Project" },
-				t = { name = "+Test", N = { name = "Neotest" },
-					p = { "<Plug>PlenaryTestFile", "PlenaryTestFile", name= "PlenaryTestFile" }
+				t = {
+					name = "+Test",
+					N = { name = "Neotest" },
+					p = { "<Plug>PlenaryTestFile", "PlenaryTestFile", name = "PlenaryTestFile" },
 				},
 				v = { name = "+View" },
 				["sn"] = { name = "+Noice" },
