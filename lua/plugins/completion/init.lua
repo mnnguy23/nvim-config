@@ -9,7 +9,6 @@ return {
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-cmdline",
       "petertriho/cmp-git",
-      -- "hrsh7th/cmp-nvim-lsp-signature-help",
       {
         "tzachar/cmp-tabnine",
         build = "./install.sh",
@@ -22,7 +21,7 @@ return {
         enabled = false,
       },
     },
-    config = function()
+    opts = function()
       local cmp = require "cmp"
       local luasnip = require "luasnip"
       local neogen = require "neogen"
@@ -31,8 +30,6 @@ return {
       local source_names = {
         nvim_lsp = "(LSP)",
         luasnip = "(Snippet)",
-        -- cmp_tabnine = "(TabNine)",
-        -- codeium = "(Codeium)",
         buffer = "(Buffer)",
         path = "(Path)",
       }
@@ -47,14 +44,13 @@ return {
         return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match "%s" == nil
       end
 
-      cmp.setup {
+      return {
         completion = {
           completeopt = "menu,menuone,noinsert",
         },
         sorting = {
           priority_weight = 2,
           comparators = {
-            -- require "cmp_tabnine.compare",
             compare.score,
             compare.recently_used,
             compare.offset,
@@ -119,18 +115,15 @@ return {
           }),
         },
         sources = cmp.config.sources {
-          { name = "nvim_lsp_signature_help", group_index = 1 },
-          { name = "nvim_lsp", group_index = 1 },
-          -- { name = "cmp_tabnine", group_index = 1 },
+          { name = "nvim_lsp", group_index = 1, max_item_count = 15 },
           { name = "codeium", group_index = 1 },
-          { name = "luasnip", group_index = 1 },
+          { name = "luasnip", group_index = 1, max_item_count = 8 },
           { name = "buffer", group_index = 2 },
           { name = "path", group_index = 2 },
           { name = "git", group_index = 2 },
           { name = "orgmode", group_index = 2 },
         },
         formatting = {
-          fields = { "kind", "abbr", "menu" },
           format = function(entry, item)
             local max_width = 80
             local duplicates_default = 0
@@ -141,15 +134,20 @@ return {
             item.menu = source_names[entry.source.name]
             item.dup = duplicates[entry.source.name] or duplicates_default
 
-            -- if entry.source.name == "cmp_tabnine" then
-            --   item.kind = ""
-            -- elseif entry.source.name == "codeium" then
-            --   item.kind = ""
-            -- end
             return item
           end,
         },
+        window = {
+          documentation = {
+            border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+            winhighlight = "NormalFloat:NormalFloat,FloatBorder:TelescopeBorder",
+          },
+        },
       }
+    end,
+    config = function(_, opts)
+      local cmp = require "cmp"
+      cmp.setup(opts)
 
       -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
       cmp.setup.cmdline({ "/", "?" }, {
@@ -170,25 +168,13 @@ return {
       })
 
       -- Auto pairs
-      local cmp_autopairs = require "nvim-autopairs.completion.cmp"
-      cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done { map_char = { tex = "" } })
+      local has_autopairs, cmp_autopairs = pcall(require, "nvim-autopairs.completion.cmp")
+      if has_autopairs then
+        cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done { map_char = { tex = "" } })
+      end
 
       -- Git
       require("cmp_git").setup { filetypes = { "NeogitCommitMessage" } }
-
-      -- TabNine
-      -- local tabnine = require "cmp_tabnine.config"
-      -- tabnine:setup {
-      --   max_lines = 1000,
-      --   max_num_results = 20,
-      --   sort = true,
-      --   run_on_every_keystroke = true,
-      --   snippet_placeholder = "..",
-      --   ignored_file_types = { -- default is not to ignore
-      --     -- uncomment to ignore in lua:
-      --     -- lua = true
-      --   },
-      -- }
     end,
   },
   {
@@ -213,10 +199,29 @@ return {
       },
     },
     build = "make install_jsregexp",
-    opts = {
-      history = true,
-      delete_check_events = "TextChanged",
-    },
+    opts = function()
+      local types = require "luasnip.util.types"
+      return {
+        history = true,
+        delete_check_events = "TextChanged",
+
+        -- Display a cursor-like placeholder in unvisited nodes of the snippet.
+        ext_opts = {
+          [types.insertNode] = {
+            unvisited = {
+              virt_text = { { "|", "Conceal" } },
+              -- virt_text_pos = "inline",
+            },
+          },
+          [types.exitNode] = {
+            unvisited = {
+              virt_text = { { "|", "Conceal" } },
+              -- virt_text_pos = "inline",
+            },
+          },
+        },
+      }
+    end,
     -- stylua: ignore
     keys = {
       {

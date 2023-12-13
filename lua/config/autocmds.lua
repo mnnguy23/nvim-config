@@ -53,7 +53,6 @@ vim.api.nvim_create_autocmd("FileType", {
     "floggraph",
     "fugitive",
     "git",
-    "gitcommit",
     "help",
     "lspinfo",
     "man",
@@ -68,6 +67,8 @@ vim.api.nvim_create_autocmd("FileType", {
     "vim",
     "neoai-input",
     "neoai-output",
+    "netrw",
+    "notify",
   },
   callback = function(event)
     vim.bo[event.buf].buflisted = false
@@ -88,7 +89,14 @@ vim.api.nvim_create_autocmd("VimLeave", {
   end,
 })
 
-
+-- -- show line diagnostics
+vim.api.nvim_create_autocmd("CursorHold", {
+  callback = function()
+    if require("plugins.lsp.utils").show_diagnostics() then
+      vim.schedule(vim.diagnostic.open_float)
+    end
+  end,
+})
 
 -- Auto create dir when saving a file, in case some intermediate directory does not exist
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
@@ -123,13 +131,15 @@ vim.api.nvim_create_autocmd("FileType", {
   command = "startinsert | 1",
 })
 
--- Start insert mode
-vim.api.nvim_create_autocmd({ "TermOpen" }, {
-  group = augroup "auto_start_insert",
-  callback = function(event)
-    local ft = vim.bo.filetype
-    if ft == nil or ft == "" then
-      vim.cmd.startinsert()
-    end
-  end,
-})
+-- -- Start insert mode
+-- vim.api.nvim_create_autocmd({ "TermOpen" }, {
+--   group = augroup "auto_start_insert",
+--   callback = function(event)
+--     local bufnr = event.buf
+--     local hide = vim.api.nvim_get_option_value("bufhidden", { buf = bufnr })
+--     local filetype = vim.api.nvim_get_option_value("filetype", { buf = bufnr })
+--     if hide ~= "hide" and filetype ~= "harpoon" then
+--       vim.cmd.startinsert()
+--     end
+--   end,
+-- })

@@ -1,5 +1,5 @@
 return {
-  {"nvim-lua/plenary.nvim", module="plenary"},
+  "nvim-lua/plenary.nvim",
   "MunifTanjim/nui.nvim",
   {
     "nvim-tree/nvim-web-devicons",
@@ -8,6 +8,7 @@ return {
   { "nacro90/numb.nvim", event = "BufReadPre", config = true },
   {
     "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
     event = "BufReadPre",
     config = true,
   },
@@ -29,19 +30,12 @@ return {
   },
   {
     "TimUntersberger/neogit",
-        requires = {
-        'nvim-lua/plenary.nvim',
-        'sindrets/diffview.nvim'
-      },
     cmd = "Neogit",
     config = {
       integrations = { diffview = true },
     },
     keys = {
       { "<leader>gs", "<cmd>Neogit kind=floating<cr>", desc = "Status" },
-      {"<leader>go", "<cmd>:DiffviewOpen<cr>", desc= "Diff Open"},
-      {"<leader>gc", "<cmd>:DiffviewClose<cr>", desc= "Diff Close"},
-
     },
   },
   {
@@ -54,14 +48,6 @@ return {
       vim.api.nvim_set_keymap("v", "<C-x>", require("dial.map").dec_visual(), { noremap = true })
       vim.api.nvim_set_keymap("v", "g<C-a>", require("dial.map").inc_gvisual(), { noremap = true })
       vim.api.nvim_set_keymap("v", "g<C-x>", require("dial.map").dec_gvisual(), { noremap = true })
-    end,
-  },
-  {
-    "andymass/vim-matchup",
-    lazy = false,
-    enabled = true,
-    config = function()
-      vim.g.matchup_matchparen_offscreen = { method = "popup" }
     end,
   },
 }
